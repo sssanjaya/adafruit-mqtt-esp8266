@@ -48,7 +48,7 @@ void setup() {
   pinMode(Relay3, OUTPUT);
   pinMode(Relay4, OUTPUT);
   pinMode(Relay5, OUTPUT);
-  
+  myservo.attach(Relay5);
   // Connect to WiFi access point.
   Serial.println(); Serial.println();
   Serial.print("Connecting to ");
@@ -108,15 +108,18 @@ void loop() {
     }
     if (subscription == &Lamp5) {
       Serial.print(F("servo: "));
-      Serial.println((char *)Lamp5.lastread);
+       int Lamp5_State = atoi((char *)Lamp5.lastread);
       int pos;
-
-      for (pos = 0; pos <= 180; pos += 1){
-        Lamp5.write(pos);
-        delay(15);
-        }
-//      digitalWrite(Relay5, Lamp4_State);
-      
+if (Lamp5_State==0){
+      for (pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
+        // in steps of 1 degree
+        myservo.write(pos);              // tell servo to go to position in variable 'pos'
+        delay(15);                       // waits 15ms for the servo to reach the position
+      }}else{
+      for (pos = 180; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
+        myservo.write(pos);              // tell servo to go to position in variable 'pos'
+        delay(15);                       // waits 15ms for the servo to reach the position
+      }}
     }
   }
 
